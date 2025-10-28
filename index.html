@@ -5,7 +5,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Diriyah • Emergency</title>
-
 <link href="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'&gt;&lt;circle cx='16' cy='16' r='16' fill='%23e53935'/&gt;&lt;/svg&gt;" rel="icon"/>
 <meta content="#0e1008" name="theme-color"/>
 <style>
@@ -67,12 +66,12 @@ p.muted{opacity:.85; margin:0 0 24px; font-size:18px}
 
 .list{display:flex; flex-direction:column; gap:12px; width:min(920px, 92vw); margin:0 auto;}
 .list .row{background:#fff; padding:18px 18px; border-radius:18px; box-shadow:0 1px 0 rgba(0,0,0,.06)}
-.list .row .name{font-weight:700; color:#0b6bdc; display:block}
+.list .row .name{font-weight:700; color:#000000; display:block}
 .list .row .type{color:#8a8a8a; font-size:13px}
 
 .map-placeholder{width:min(920px, 92vw); margin:0 auto; background:#fff; padding:16px; border-radius:18px; box-shadow:0 1px 0 rgba(0,0,0,.06)}
 #mapLinks ul{margin:0;padding-left:18px}
-#mapLinks a{color:#0b6bdc; text-decoration:none}
+#mapLinks a{color:#000000; text-decoration:none}
 
 #screen-zone .card{background:#fff; width:min(920px, 92vw); margin:12px auto; padding:18px; border-radius:18px; box-shadow:0 1px 0 rgba(0,0,0,.06)}
 #screen-zone h3{margin:0 0 10px}
@@ -149,7 +148,6 @@ p.muted{opacity:.85; margin:0 0 24px; font-size:18px}
 </button>
 </nav>
 </div>
-
 <script>
 // Minimal client-side behavior
 (function(){
@@ -252,6 +250,34 @@ p.muted{opacity:.85; margin:0 0 24px; font-size:18px}
   document.querySelectorAll('#zoneList .row').forEach(r=>{
     r.addEventListener('click', ()=>go('screen-zone'));
   });
+
+  // Add bilingual zone name switcher
+  const zoneTranslations = {
+    "AlBujairi":"البجيري",
+    "Minzal":"المنزل",
+    "Al-Murrayeh (Layali AlDiriyah)":"المرّيحة (ليالي الدرعية)",
+    "Adhwaihrah":"الضويحرة",
+    "Wadi Safar":"وادي صفار",
+    "AlTawalie":"الطوالية"
+  };
+  function updateZoneNames(){
+    document.querySelectorAll('#zoneList .row .name').forEach(el=>{
+      const en = el.getAttribute('data-en') || el.textContent.trim();
+      el.setAttribute('data-en', en);
+      if(lang==='ar'){
+        el.textContent = zoneTranslations[en] || en;
+      } else {
+        el.textContent = el.getAttribute('data-en');
+      }
+    });
+  }
+  // Call updateZoneNames whenever language changes
+  const oldApplyLang = applyLang;
+  applyLang = function(){
+    oldApplyLang();
+    updateZoneNames();
+  };
+
 })();
 </script></body>
 </html>
